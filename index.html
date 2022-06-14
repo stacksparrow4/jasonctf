@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Amazing Note Taking App</title>
+</head>
+
+<body>
+    <h1>Amazing Note Taking App</h1>
+
+    <p>This app is amazing</p>
+    <p>And also takes notes</p>
+
+    <textarea style="width: 300px; height: 100px;" id="input-box"></textarea>
+
+    <br>
+
+    <button id="render-preview">Render Preview</button>
+    <button id="save-locally">Save Locally</button>
+    <button id="share-link">Share Link</button>
+
+    <pre id="shared-link"></pre>
+
+    <h3>Rendered Note</h3>
+    <div id="rendered-note"></div>
+
+    <script>
+        const inputBox = document.getElementById("input-box");
+
+        const renderPreview = document.getElementById("render-preview");
+        const saveLocally = document.getElementById("save-locally");
+        const shareLink = document.getElementById("share-link");
+        const sharedLink = document.getElementById("shared-link");
+        const renderedNote = document.getElementById("rendered-note");
+
+        renderPreview.onclick = () => {
+            renderedNote.innerHTML = inputBox.value;
+        }
+
+        saveLocally.onclick = () => {
+            localStorage.setItem("note", inputBox.value);
+        }
+
+        shareLink.onclick = () => {
+            let webPath = window.location.href;
+            const queryInd = webPath.indexOf('?');
+            if (queryInd !== -1) {
+                webPath = webPath.substring(0, queryInd);
+            }
+            sharedLink.innerText = webPath + '?msg=' + encodeURIComponent(inputBox.value);
+        }
+
+        if (window.location.search.startsWith('?msg=')) {
+            inputBox.value = decodeURIComponent(window.location.search.substring(5));
+        } else {
+            inputBox.value = localStorage.getItem("note") || "Enter your note here!";
+        }
+        renderedNote.innerHTML = inputBox.value;
+    </script>
+</body>
+
+</html>
